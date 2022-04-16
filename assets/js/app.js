@@ -293,6 +293,20 @@ function savePalette(e) {
   paletteBtn.classList.add(paletteObj.number);
   paletteBtn.innerText = "Select";
 
+  // Attach event to the button
+  paletteBtn.addEventListener("click", (e) => {
+    closeLibrary();
+    const paletteIndex = e.target.classList[1];
+    initialColors = [];
+    savedPalettes[paletteIndex].colors.forEach((color, index) => {
+      initialColors.push(color);
+      colorDivs[index].style.backgroundColor = color;
+      const text = colorDivs[index].children[0];
+      checkTextContrast(color, text);
+      updateTextUI(index);
+    });
+  });
+
   //Append to Library
   palette.appendChild(title);
   palette.appendChild(preview);
@@ -305,7 +319,7 @@ function savetoLocal(paletteObj) {
   if (localStorage.getItem("palettes") === null) {
     localPalettes = [];
   } else {
-    localPalettes = JSNO.parse(localStorage.getItem("palettes"));
+    localPalettes = JSON.parse(localStorage.getItem("palettes"));
   }
   localPalettes.push(paletteObj);
   localStorage.setItem("palettes", JSON.stringify(localPalettes));
