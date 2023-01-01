@@ -269,9 +269,17 @@ function savePalette(e) {
   });
 
   // Generate Object
-  let paletteNumber = savedPalettes.length;
+  let paletteNumber;
+  const paletteObjects = JSON.parse(localStorage.getItem("palettes"));
+  if (paletteObjects) {
+    paletteNumber = paletteObjects.length;
+  } else {
+    paletteNumber = savedPalettes.length;
+  }
+
   const paletteObj = { name, colors, number: paletteNumber };
   savedPalettes.push(paletteObj);
+
   // Save to LocalStorage
   savetoLocal(paletteObj);
   saveInput.value = "";
@@ -344,7 +352,7 @@ function getLocal() {
     localPalettes = [];
   } else {
     const paletteObjects = JSON.parse(localStorage.getItem("palettes"));
-
+    savedPalettes = [...paletteObjects];
     paletteObjects.forEach((paletteObj) => {
       // Generate the palette for library
       const palette = document.createElement("div");
